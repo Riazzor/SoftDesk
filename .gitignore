@@ -1,2 +1,5 @@
 __py*/
 *.pyc
+specs/
+db.sqlite3
+migrations/
