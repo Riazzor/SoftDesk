@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from . import models
 
 
@@ -6,51 +7,50 @@ from . import models
 @admin.register(models.User)
 class UserAdmin(admin.ModelAdmin):
     list_display = (
-        'first_name',
-        'last_name',
-        'email',
+        "first_name",
+        "last_name",
+        "email",
     )
     search_fields = (
-        'first_name',
-        'last_name',
+        "first_name",
+        "last_name",
     )
 
 
 @admin.register(models.Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = (
-        'title',
-        'type',
-        'created_time',
+        "title",
+        "type",
+        "created_time",
     )
 
 
 @admin.register(models.Contributor)
 class ContributorAdmin(admin.ModelAdmin):
     list_display = (
-        'first_name',
-        'last_name',
-        'email',
-        'permission',
-        'role',
+        "user",
+        "project",
+        "permission",
+        "role",
     )
 
 
 @admin.register(models.Issue)
 class IssueAdmin(admin.ModelAdmin):
     list_display = (
-        'title',
-        'tag',
-        'status',
-        'assignee',
-        'created_time',
+        "title",
+        "tag",
+        "status",
+        "assignee",
+        "created_time",
     )
 
 
 @admin.register(models.Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = (
-        'author',
-        'issue',
-        'created_time',
+        "author",
+        "issue",
+        "created_time",
     )

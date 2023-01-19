@@ -10,14 +10,15 @@ class User(AbstractUser):
     email = models.EmailField(verbose_name="Adresse email", blank=False, max_length=128, unique=True)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'username']
+    REQUIRED_FIELDS = ["first_name", "last_name", "username"]
 
 
 class Project(models.Model):
     class ProjectType(models.TextChoices):
-        PROJECT = 'project', ('Projet')
-        PRODUCT = 'product', ('Produit')
-        APPLICATION = 'application', ('Application')
+        BACKEND = "backend", ("Backend")
+        FRONTEND = "frontend", ("Frontend")
+        IOS = "ios", ("Ios")
+        ANDROID = "android", ("Android")
 
     project_id = models.BigAutoField(primary_key=True)
     title = models.CharField(verbose_name="Titre", blank=False, max_length=128)
@@ -25,7 +26,7 @@ class Project(models.Model):
     type = models.CharField(
         max_length=128,
         choices=ProjectType.choices,
-        default=ProjectType.PROJECT,
+        default=ProjectType.BACKEND,
     )
     author_user = models.ForeignKey(
         to=User,
@@ -39,14 +40,14 @@ class Project(models.Model):
 
 class Contributor(models.Model):
     class Permissions(models.TextChoices):
-        READ_ONLY = 'read', _('Lecture seule')
-        WRITE = 'write', _('Ecriture')
-        DELETE = 'delete', _('Suppression')
+        READ_ONLY = "read", _("Lecture seule")
+        WRITE = "write", _("Ecriture")
+        DELETE = "delete", _("Suppression")
 
     class Roles(models.TextChoices):
-        AUTHOR = 'author', _('Auteur')
-        MEMBER = 'member', _('Membre')
-        CONTRIBUTOR = 'contributor', _('Contributeur')
+        AUTHOR = "author", _("Auteur")
+        MEMBER = "member", _("Membre")
+        CONTRIBUTOR = "contributor", _("Contributeur")
 
     user = models.ForeignKey(
         to=User,
@@ -72,19 +73,19 @@ class Contributor(models.Model):
 
 class Issue(models.Model):
     class Tag(models.TextChoices):
-        BUG = 'bug', _('Bug')
-        FEATURE = 'feature', _('Amelioration')
-        TASK = 'task', _('Tache')
+        BUG = "bug", _("Bug")
+        FEATURE = "feature", _("Amelioration")
+        TASK = "task", _("Tache")
 
     class Priority(models.TextChoices):
-        LOW = 'low', _('Faible')
-        MEDIUM = 'medium', _('Moyen')
-        HIGH = 'high', _('Eleve')
+        LOW = "low", _("Faible")
+        MEDIUM = "medium", _("Moyen")
+        HIGH = "high", _("Eleve")
 
     class Status(models.TextChoices):
-        TODO = 'todo', _('A faire')
-        IN_PROGRESS = 'in_progress', _('En cours')
-        DONE = 'done', _('Termine')
+        TODO = "todo", _("A faire")
+        IN_PROGRESS = "in_progress", _("En cours")
+        DONE = "done", _("Termine")
 
     issue_id = models.BigAutoField(primary_key=True)
     title = models.CharField(verbose_name="Titre", blank=False, max_length=128)
