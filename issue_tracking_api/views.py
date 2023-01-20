@@ -8,3 +8,11 @@ from . import models, serializers
 class ProjectAPIViewSet(viewsets.ModelViewSet):
     queryset = models.Project.objects.all()
     serializer_class = serializers.ProjectSerializer
+
+
+class IssueAPIViewSet(viewsets.ModelViewSet):
+    queryset = models.Issue.objects.all()
+    serializer_class = serializers.IssueSerializer
+
+    def get_queryset(self):
+        return models.Issue.objects.filter(project=self.kwargs['project_pk'])
