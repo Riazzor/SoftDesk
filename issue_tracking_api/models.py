@@ -109,7 +109,7 @@ class Issue(models.Model):
         max_length=128,
         choices=Status.choices,
     )
-    author = models.ForeignKey(
+    author_user = models.ForeignKey(
         to=User,
         on_delete=models.SET_NULL,
         related_name="issues",
@@ -128,7 +128,7 @@ class Issue(models.Model):
 class Comment(models.Model):
     comment_id = models.BigAutoField(primary_key=True)
     description = models.CharField(max_length=128)
-    author = models.ForeignKey(
+    author_user = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
         related_name="comments",

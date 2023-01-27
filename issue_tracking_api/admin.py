@@ -50,7 +50,7 @@ class IssueAdmin(admin.ModelAdmin):
 @admin.register(models.Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = (
-        "author",
+        "author_user",
         "issue",
         "created_time",
     )
