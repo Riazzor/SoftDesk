@@ -1,9 +1,15 @@
+from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from . import models, permissions, serializers
 
 # Create your views here.
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = models.User.objects.all()
+    serializer_class = serializers.RegisterSerializer
 
 
 class ProjectAPIViewSet(viewsets.ModelViewSet):

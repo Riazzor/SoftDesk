@@ -18,9 +18,11 @@ issue_router = routers.NestedSimpleRouter(project_router, "issues", lookup="issu
 issue_router.register("comments", views.CommentAPIViewSet, basename="comments")
 
 urlpatterns = [
+    path("signup/", views.RegisterView.as_view(), name="signup"),
+    path("login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("refresh-token/", TokenRefreshView.as_view(), name="token_refresh"),
+
     path("", include(router.urls)),
     path("", include(project_router.urls)),
     path("", include(issue_router.urls)),
-    path("login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("refresh-token/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
