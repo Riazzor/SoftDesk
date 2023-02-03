@@ -1,7 +1,10 @@
 from django.urls import include, path
 
 from rest_framework_nested import routers
-
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 from . import views
 
 
@@ -15,7 +18,9 @@ issue_router = routers.NestedSimpleRouter(project_router, "issues", lookup="issu
 issue_router.register("comments", views.CommentAPIViewSet, basename="comments")
 
 urlpatterns = [
-    path("api/", include(router.urls)),
-    path("api/", include(project_router.urls)),
-    path("api/", include(issue_router.urls)),
+    path("", include(router.urls)),
+    path("", include(project_router.urls)),
+    path("", include(issue_router.urls)),
+    path("login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("refresh-token/", TokenRefreshView.as_view(), name="token_refresh"),
 ]

@@ -1,11 +1,12 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as UA
 
 from . import models
 
 
 # Register your models here.
 @admin.register(models.User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(UA):
     list_display = (
         "first_name",
         "last_name",

@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from . import models, serializers
 
@@ -6,11 +7,13 @@ from . import models, serializers
 
 
 class ProjectAPIViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = models.Project.objects.all()
     serializer_class = serializers.ProjectSerializer
 
 
 class IssueAPIViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = serializers.IssueSerializer
 
     def get_queryset(self):
@@ -18,6 +21,7 @@ class IssueAPIViewSet(viewsets.ModelViewSet):
 
 
 class CommentAPIViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = serializers.CommentSerializer
 
     def get_queryset(self):
