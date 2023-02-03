@@ -1,19 +1,25 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from . import models, serializers
+from . import models, permissions, serializers
 
 # Create your views here.
 
 
 class ProjectAPIViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated,
+        permissions.IsOwnerOrReadOnly,
+    ]
     queryset = models.Project.objects.all()
     serializer_class = serializers.ProjectSerializer
 
 
 class IssueAPIViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated,
+        permissions.IsOwnerOrReadOnly,
+    ]
     serializer_class = serializers.IssueSerializer
 
     def get_queryset(self):
@@ -21,7 +27,10 @@ class IssueAPIViewSet(viewsets.ModelViewSet):
 
 
 class CommentAPIViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated,
+        permissions.IsOwnerOrReadOnly,
+    ]
     serializer_class = serializers.CommentSerializer
 
     def get_queryset(self):
