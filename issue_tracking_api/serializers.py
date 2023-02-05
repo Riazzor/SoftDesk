@@ -45,37 +45,26 @@ class ProjectSerializer(ModelSerializer):
 
 
 class IssueSerializer(ModelSerializer):
-    project = ProjectSerializer
-
     class Meta:
         model = models.Issue
         fields = ["issue_id", "title", "description", "tag", "priority", "project", "status", "author_user", "assignee"]
-        read_only_fields = ["created_time", "updated_time"]
+        read_only_fields = ["project", "created_time", "updated_time"]
+        depth = 1
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        # we want a post with only the project id but the detail in list and detail.
-        data["project"] = ProjectSerializer(instance.project).data
+        data["author_user"] = data["author_user"]["username"]
         return data
-
-    def update(self, instance, validated_data):
-        validated_data.pop("project", None)  # once created, can't change the project
-        return super().update(instance, validated_data)
 
 
 class CommentSerializer(ModelSerializer):
-    issue = IssueSerializer
-
     class Meta:
         model = models.Comment
         fields = ["comment_id", "description", "author_user", "issue", "created_time", "updated_time"]
+        read_only_fields = ["issue", "created_time", "updated_time"]
+        depth = 1
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        # we want a post with only the issue id but the detail in list and detail.
-        data["issue"] = IssueSerializer(instance.issue).data
+        data["author_user"] = data["author_user"]["username"]
         return data
-
-    def update(self, instance, validated_data):
-        validated_data.pop("issue", None)  # once created, can't change the issue
-        return super().update(instance, validated_data)

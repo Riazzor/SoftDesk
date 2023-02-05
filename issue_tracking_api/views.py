@@ -20,6 +20,9 @@ class ProjectAPIViewSet(viewsets.ModelViewSet):
     queryset = models.Project.objects.all()
     serializer_class = serializers.ProjectSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(author_user=self.request.user)
+
 
 class IssueAPIViewSet(viewsets.ModelViewSet):
     permission_classes = [
@@ -30,6 +33,12 @@ class IssueAPIViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return models.Issue.objects.filter(project=self.kwargs['project_pk'])
+
+    def perform_create(self, serializer):
+        serializer.save(
+            author_user=self.request.user,
+            project_id=self.kwargs['project_pk'],
+        )
 
 
 class CommentAPIViewSet(viewsets.ModelViewSet):
@@ -43,4 +52,10 @@ class CommentAPIViewSet(viewsets.ModelViewSet):
         return models.Comment.objects.filter(
             issue__project=self.kwargs['project_pk'],
             issue=self.kwargs['issue_pk'],
+        )
+
+    def perform_create(self, serializer):
+        serializer.save(
+            author_user=self.request.user,
+            issue_id=self.kwargs['issue_pk'],
         )
