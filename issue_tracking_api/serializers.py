@@ -44,6 +44,20 @@ class ProjectSerializer(ModelSerializer):
         read_only_fields = ["created_time", "updated_time"]
 
 
+class ContributorSerializer(ModelSerializer):
+    class Meta:
+        model = models.Contributor
+        fields = ["user", "project", "permission", "role"]
+        read_only_fields = ["project"]
+        depth = 1
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["user"] = data["user"]["email"]
+        data["project"] = data["project"]["title"]
+        return data
+
+
 class IssueSerializer(ModelSerializer):
     class Meta:
         model = models.Issue

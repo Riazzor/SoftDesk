@@ -24,6 +24,26 @@ class ProjectAPIViewSet(viewsets.ModelViewSet):
         serializer.save(author_user=self.request.user)
 
 
+class ContributorAPIViewSet(viewsets.ModelViewSet):
+    permission_classes = [
+        IsAuthenticated,
+    ]
+    serializer_class = serializers.ContributorSerializer
+    allowed_methods = ['GET', 'POST', 'DELETE']
+
+    def get_queryset(self):
+        return models.Contributor.objects.filter(project=self.kwargs['project_pk'])
+
+    def retrieve(self, request, *args, **kwargs):
+        return self.http_method_not_allowed(request)
+
+    def perform_create(self, serializer):
+        serializer.save(
+            user=self.request.user,
+            project_id=self.kwargs["project_pk"],
+        )
+
+
 class IssueAPIViewSet(viewsets.ModelViewSet):
     permission_classes = [
         IsAuthenticated,
