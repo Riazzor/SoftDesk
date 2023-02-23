@@ -43,9 +43,18 @@ class ContributorAPIViewSet(mixins.IsContributorMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(
-            user=self.request.user,
             project_id=self.kwargs["project_pk"],
         )
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update(
+            {
+                "project_pk": self.kwargs["project_pk"],
+            }
+        )
+        print(context)
+        return context
 
 
 class IssueAPIViewSet(mixins.IsContributorMixin, viewsets.ModelViewSet):
