@@ -1,12 +1,10 @@
-from rest_framework.serializers import (
-    CharField, ModelSerializer, ValidationError,
-)
+from rest_framework import serializers
 
 from . import models
 
 
-class RegisterSerializer(ModelSerializer):
-    password2 = CharField(write_only=True, required=True)
+class RegisterSerializer(serializers.ModelSerializer):
+    password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = models.User
@@ -19,7 +17,7 @@ class RegisterSerializer(ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise ValidationError({"password": "Password fields didn't match."})
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
 
         return attrs
 
@@ -37,28 +35,37 @@ class RegisterSerializer(ModelSerializer):
         return user
 
 
-class ProjectSerializer(ModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Project
         fields = ["project_id", "title", "description", "type", "created_time", "updated_time"]
         read_only_fields = ["created_time", "updated_time"]
 
 
-class ContributorSerializer(ModelSerializer):
+class ContributorSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(slug_field="email", queryset=models.User.objects.all())
+
     class Meta:
         model = models.Contributor
         fields = ["user", "project", "permission", "role"]
         read_only_fields = ["project"]
         depth = 1
 
+    def validate_user(self, value):
+        if models.Contributor.objects.filter(
+            user=value,
+            project=self.context.get('project_pk'),
+        ).exists():
+            raise serializers.ValidationError('Contributor already exist')
+        return value
+
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data["user"] = data["user"]["email"]
         data["project"] = data["project"]["title"]
         return data
 
 
-class IssueSerializer(ModelSerializer):
+class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Issue
         fields = ["issue_id", "title", "description", "tag", "priority", "project", "status", "author_user", "assignee"]
@@ -71,7 +78,7 @@ class IssueSerializer(ModelSerializer):
         return data
 
 
-class CommentSerializer(ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Comment
         fields = ["comment_id", "description", "author_user", "issue", "created_time", "updated_time"]

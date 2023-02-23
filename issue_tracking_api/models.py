@@ -51,9 +51,8 @@ class Contributor(models.Model):
 
     user = models.ForeignKey(
         to=User,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="contributors",
-        null=True,
     )
     project = models.ForeignKey(
         to=Project,
@@ -69,6 +68,9 @@ class Contributor(models.Model):
         max_length=128,
         choices=Roles.choices,
     )
+
+    class Meta:
+        unique_together = ('project', 'user')  # can't assign the same user twice to the same project.
 
 
 class Issue(models.Model):
