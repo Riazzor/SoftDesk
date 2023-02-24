@@ -4,4 +4,3 @@ django-extensions==3.2.1
 djangorestframework==3.14.0
 pytz==2022.7
 sqlparse==0.4.3
-woob==3.1+budgea.2
